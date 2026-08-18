@@ -1,0 +1,21 @@
+*{
+  /* background : #071A13;
+  
+  color:  #D4AF37; */
+  background: #160B0B;
+  color: #C9A227; 
+  
+}
+.navbar-item{
+  text-decoration: none;
+}
+.navbar-item:hover{
+  color: #ffffff;
+  text-decoration: underline;
+}
+.navbar-menu{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-between;
+}
