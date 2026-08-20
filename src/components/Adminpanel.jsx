@@ -111,7 +111,6 @@ function Adminpanel(user, onproductAdded) {
           />
         </div>
         <div className="items-group">
-
           <label htmlFor="imageURL">Image URL:</label>
           <input
             type="text"
@@ -141,9 +140,10 @@ function Adminpanel(user, onproductAdded) {
             onChange={(e) => setPrice(e.target.value)}
           />
         </div>
-        
+
         <button type="submit">Add Product</button>
       </form>
     </div>
   );
 }
+export default Adminpanel;

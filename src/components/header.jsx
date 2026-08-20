@@ -1,26 +1,45 @@
 import React from "react";
 import "../App.css";
 
-
 function Header() {
   return (
     <header>
-      <nav className="navbar">
-        <div className="navbar-logo">
-        <ul className="navbar-menu">
-
-            <img src="./" alt="" /> 
-          <div className="navbar-brand">
-            Mughal Foods</div>
-            <li className="navbar-item"><a href="#">Home</a></li>
-            <li className="navbar-item"><a href="#menu">Menu</a></li>
-            <li className="navbar-item"><a href="#contact">Contact</a></li>
-            <li className="navbar-item"><a href="#wishlist">wishlist</a></li>
-
-        </ul>
+      <div>
+        <h2 className="brand-logo" onClick={() => setpage("home")}>
+          <img src="../logo.png/public" alt="" />
+          MUghal Food
+        </h2>
+        <nav className="nav-links">
+          <button
+            className={`nav-btn ${page === "admin" ? "active" : ""}`}
+            onClick={() => setPage("admin")}
+          >
+            Home
+          </button>
+          <button
+            className={`nav-btn ${page === "admin" ? "active" : ""}`}
+            onClick={() => setPage("admin")}
+          >
+            {user ? "+ Add product" : "🔐Admin "}
+          </button>
+          <button
+            className={`nav-btn ${page === "admin" ? "active" : ""}`}
+            onClick={() => setPage("admin")}
+          >
+            🛒 Cart ({cartCount})
+          </button>
+        </nav>
+       {user ? (
+         <div className="user-profile">
+              <span className="user-email">{user.email}</span>
+              <button onClick={onLogout} className="logout-btn">Logout</button>
+            </div>
+          ) : (
+            <button onClick={() => setPage('admin')} className="admin-login-btn">
+              Login as Admin
+            </button>
+          )}
         </div>
-        
-      </nav>
     </header>
   );
 }
