@@ -1,56 +1,114 @@
+
+
+
 import React from "react";
+
 import burger from "../assets/burger.png";
-import mysupabase from "../supabaseClient";
 import pizza from "../assets/pizza.png";
 
-function Products({ products = [], onGotoAdmin, onAddToCart }) {
+function Showproducts({
+  products,
+  onGoToAdmin,
+  onAddToCart
+}) {
   return (
     <div className="products">
+
       <div className="burger">
-        <img className="burger" src={burger} alt="Burger" />
-      </div>
-      <div className="pizza">
-        <img className="pizza" src={pizza} alt="Pizza" />
+        <img
+          className="burger"
+          src={burger}
+          alt="Burger"
+        />
       </div>
 
-      <div className="product section ">
-        <h2>store items</h2>
-        <p>browse items added by Admin</p>
-        <button onClick={onGotoAdmin}>+ Add new items </button>
+      <div className="pizza">
+        <img
+          className="pizza"
+          src={pizza}
+          alt="Pizza"
+        />
       </div>
+
+      <div className="product-section">
+        <h2>Store Items</h2>
+
+        <p>Browse items added by Admin</p>
+
+        <button onClick={onGoToAdmin}>
+          + Add New Item
+        </button>
+      </div>
+
       {products.length === 0 ? (
+
         <div className="Empty-product">
+
           <p>📦</p>
-          <h3>No product found</h3>
-          <button onClick={onGotoAdmin}>Goto Admin panael</button>
+
+          <h3>No Product Found</h3>
+
+          <button onClick={onGoToAdmin}>
+            Go To Admin Panel
+          </button>
+
         </div>
+
       ) : (
+
         <div className="products-grid">
+
           {products.map((product) => (
-            <div key={product.id} className="main-card">
+
+            <div
+              key={product.id}
+              className="main-card"
+            >
+
               <img
-                src={product.image_url}
-                alt={product.title}
+                src={product.image_URL}
+                alt={product.name}
                 className="img-tag"
               />
+
               <div className="product-info">
-                <h3>{product.title}</h3>
-                <p>{product.description || "No description ."}</p>
+
+                <h3>{product.name}</h3>
+
+                <p>
+                  {product.description ||
+                    "No description."}
+                </p>
+
                 <div className="pro-info">
-                  <span className="price-tag">Rs{product.price}</span>
+
+                  <span className="price-tag">
+                    Rs {product.price}
+                  </span>
+
                   <button
-                    onClick={() => onAddToCart(product)}
+                    onClick={() =>
+                      onAddToCart(product)
+                    }
                     className="add-to-cart"
                   >
                     + Add to Cart
                   </button>
+
                 </div>
+
               </div>
+
             </div>
+
           ))}
+
         </div>
+
       )}
+
     </div>
   );
 }
-export default Products;
+
+export default Showproducts;

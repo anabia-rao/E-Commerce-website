@@ -1,8 +1,9 @@
-import React from "react";
-import { useState } from "react";
-import mysupabase from "../supabaseClient";
+import React, { useState } from "react";
+import { mysupabase } from "../supabase";
 
-function Adminpanel(user, onproductAdded) {
+
+
+function Adminpanel({ user, onProductsAdded }) {
   const [imageURL, setImageURL] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -10,15 +11,17 @@ function Adminpanel(user, onproductAdded) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [Issignedup, setIsSignedup] = useState(false);
+  const [issignedup, setIsSignedup] = useState(false);
 
-  async function handleSignUp() {
+  const handleSignUp = async (e) => {
     e.preventDefault();
+
     if (issignedup) {
-      const { error } = await mysupabase.auth.signupWithPassword({
+      const { error } = await mysupabase.auth.signUp({
         email,
         password,
       });
+
       if (error) {
         alert("Error:" + error.message);
       } else {
@@ -29,65 +32,104 @@ function Adminpanel(user, onproductAdded) {
         email,
         password,
       });
+
       if (error) {
         alert("login Error:" + error.message);
       } else {
         alert("Logged in successfully!");
       }
     }
-  }
-  function handleSubmit(e) {
-    e.preventDefault();
-    // Handle form submission logic here
-    const addproduct = async () => {
-      const { data, error } = await mysupabase.from("products").insert([
-        {
-          image_URL: imageURL,
-          description: description,
-          price: Number(price),
-          name: name,
-          user_id: user.id,
-          user_email: user.email,
-        },
-      ]);
-      if (error) {
-        alert("Error:" + error.message);
-      } else {
-        alert("Product added successfully!");
-        setImageURL("");
-        setDescription("");
-        setPrice("");
-        setName("");
-        onproductAdded(data[0]);
-      }
-    };
+  };
 
-    addproduct();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   const { data, error } = await mysupabase.from("products").insert([
+  //     {
+  //       image_URL: imageURL,
+  //       description: description,
+  //       price: Number(price),
+  //       name: name,
+  //       user_id: user.id,
+  //       user_email: user.email,
+  //     },
+  //   ]);
+
+  //   if (error) {
+  //     alert("Error:" + error.message);
+  //   } else {
+  //     alert("Product added successfully!");
+  //     setImageURL("");
+  //     setDescription("");
+  //     setPrice("");
+  //     setName("");
+  //     onproductAdded(data?.[0]);
+  //   }
+  // };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const { data, error } = await mysupabase
+    .from("products")
+    .insert([
+      {
+        image_URL: imageURL,
+        description: description,
+        price: Number(price),
+        name: name,
+        user_id: user.id,
+        user_email: user.email,
+      },
+    ])
+    .select()
+    .single();
+
+  if (error) {
+    console.log("Product Insert Error:", error);
+    alert("Error: " + error.message);
+    return;
   }
+
+  alert("Product added successfully!");
+
+  setImageURL("");
+  setDescription("");
+  setPrice("");
+  setName("");
+
+  onProductsAdded(data);
+};
   if (!user) {
     return (
       <div className="adminpanel">
         <div className="auth-form">
-          <h2>🔐{issignedup ? " Admin Sign Up" : "Admin Log In"}</h2>
-          <p>First log in to add products</p>
-          <form onclick={handleSignUp}>
+          <h2 className="h33">🔐{issignedup ? " Admin Sign Up" : "Admin Log In"}</h2>
+          <p className="para">First log in to add products</p>
+          <form onSubmit={handleSignUp} className="Admin-form">
+        
+            <h2  className="h33">Email</h2>
             <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+             className="admin-input"
+             type="email"
+             placeholder="Email"
+             value={email}
+             onChange={(e) => setEmail(e.target.value)}
+             required
+             />
+      
+            <h2 className="h33">Password</h2>
             <input
+             className="admin-input"
               type="password"
-              placeholder="Aleast 6 digits"
+              placeholder="At least 6 digits"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <button type="submit">{issignedup ? "Sign Up" : "Log In"}</button>
+
+            <button type="submit" className="admin-btn" >{issignedup ? "Sign Up" : "Log In"}</button>
           </form>
-          <button onClick={() => setIsSignedup(!issignedup)}>
+          <button onClick={() => setIsSignedup(!issignedup)} className="admin-btn">
             {issignedup
               ? "Already have an account? Log In"
               : "Don't have an account? Sign Up"}
@@ -96,33 +138,44 @@ function Adminpanel(user, onproductAdded) {
       </div>
     );
   }
+
   return (
     <div className="adminpanelcontainer">
-      <h2>Welcome,➕ Add New Product {user.email}</h2>
-      <form onSubmit={handleSubmit}>
+      <h2 >Welcome, ➕ Add New Product {user.email}</h2>
+      <form className ="admin-form" onSubmit={handleSubmit}>
+        <div className="parent-first">
+
         <div className="items-group">
-          <label htmlFor="name">Name:</label>
+          <label htmlFor="name" className="form-title">Name:</label>
           <input
-            type="text"
-            id="name"
-            placeholder="Enter product name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+          className="input"
+          
+          type="text"
+          id="name"
+          placeholder="Enter product name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           />
         </div>
         <div className="items-group">
-          <label htmlFor="imageURL">Image URL:</label>
+          <label htmlFor="imageURL" className="form-title">Image URL:</label>
           <input
-            type="text"
-            id="imageURL"
-            placeholder="Enter image URL"
-            value={imageURL}
-            onChange={(e) => setImageURL(e.target.value)}
+          className="input"
+          
+          type="text"
+          id="imageURL"
+          placeholder="Enter image URL"
+          value={imageURL}
+          onChange={(e) => setImageURL(e.target.value)}
           />
         </div>
+          </div>
+          <div className="parent-sec">
+
         <div className="items-group">
-          <label htmlFor="description">Description:</label>
+          <label htmlFor="description" className="form-title">Description:</label>
           <input
+          className="input"
             type="text"
             id="description"
             placeholder="Enter product description"
@@ -131,19 +184,22 @@ function Adminpanel(user, onproductAdded) {
           />
         </div>
         <div className="items-group">
-          <label htmlFor="price">Price:</label>
+          <label htmlFor="price" className="form-title">Price:</label>
           <input
-            type="number"
-            id="price"
-            placeholder="Enter price"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+          className="input"
+          type="number"
+          id="price"
+          placeholder="Enter price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
           />
         </div>
+          </div>
 
-        <button type="submit">Add Product</button>
+        <button type="submit" className="admin-btn">Add Product</button>
       </form>
     </div>
   );
 }
+
 export default Adminpanel;

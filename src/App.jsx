@@ -1,17 +1,18 @@
 import React from "react";
-      import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Header from "./components/header";
 import Home from "./components/home";
-import Products from "./components/products";
-import cart from "./components/cart";   
+import Showproducts from "./components/products";
+import Cart from "./components/cart";
 import Adminpanel from "./components/Adminpanel";
-import  mysupabase  from "./supabaseClient";
+import Footer from "./components/Footer";
+import { mysupabase } from "./supabase";
 
 const App = () => {
   const [user, setUser] = useState(null);
-  const [product, setProduct] = useState("");
-  const [cart, setCart] = useState("");
+  const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
   const [page, setPage] = useState("home");
 
   useEffect(() => {
@@ -20,100 +21,117 @@ const App = () => {
         setUser(session?.user || null);
       },
     );
-    return () =>checkUser.subscription.unsubcribe();
+    return () => checkUser.subscription.unsubscribe();
   }, []);
-    
-  function addToCard (product){
-    const find = addToCard.find((item) => item.id === product.id);
-    if(find){
-      setCart (cart.map ((item) => item.id === product.id?  {...item , qty :item.qty + 1} : item 
-      ));
+
+  function addToCard(products) {
+    const find = cart.find((item) => item.id === products.id);
+    if (find) {
+      setCart(
+        cart.map((item) =>
+          item.id === products.id ? { ...item, qty: item.qty + 1 } : item,
+        ),
+      );
+    } else {
+      setCart([...cart, { ...products, qty: 1 }]);
     }
-    else {
-      setCart([...cart , { ...product , qty : 1 } ]);
-    }
-   return   alert (product.title  + "added to cart");
+    return alert(products.name + "added to cart");
   }
-  
-  function changeQty (id , amount) {
-  setCart (cart.map( (item) =>{
-  if(item.id ===  id) {
-    const newqty= item.qty + amount;
-    return newqty > 0 ? {...item , qty: newqty} : null;
 
+ 
+  async function getproducts() {
+  const { data, error } = await mysupabase
+    .from("products")
+    .select("*");
+
+  if (error) {
+    console.log("Product fetch error:", error);
+    return;
   }
-  return item
-} ) .filter(Boolean));
-  
 
+  console.log("Products:", data);
+  setProducts(data || []);
+}
+
+useEffect(() => {
+  getproducts();
+}, []);
+
+  function changeQty(id, amount) {
+    setCart(
+      cart
+        .map((item) => {
+          if (item.id === id) {
+            const newqty = item.qty + amount;
+            return newqty > 0 ? { ...item, qty: newqty } : null;
+          }
+          return item;
+        })
+        .filter(Boolean),
+    );
   }
-   function onDelete (id){
-    setCart(cart.filter (item => item.id!== id));
-   }
-    
+  function onDelete(id) {
+    setCart(cart.filter((item) => item.id !== id));
+  }
 
-
-    async function logout (){
+  async function logout() {
     await mysupabase.auth.signOut();
-    setPage('home');
-   }
+    setPage("home");
+  }
 
- async function  getproducts(){
+  async function getproducts() {
+    const { data, error } = await mysupabase.from("products").select("*");
+    if (!error && data) {
+      setProducts(data);
+    }
+  }
 
-   const {data ,error} = await mysupabase
-
-   .from('products')
-   .select('*');
-   if (!error && data){
-    setProducts(data);
-   }
- }
-
-  useEffect(() =>{
+  useEffect(() => {
     getproducts();
-  })
+  }, []);
 
-  const cartcount = cart.reduce((total ,item) => total + item.qty ,0 );
+  const cartcount = (cart || []).reduce((total, item) => total + item.qty, 0);
 
   return (
     <div className="App">
-      <Header  
-       page={page} 
-        setPage={setPage} 
-        user={user} 
-        onLogout={logout} 
-        cartCount={cartCount} />
-      <Home />
-      <Products  
-            products={products} 
-            onAddToCart={addToCart} 
-            onGoToAdmin={() => setPage('admin')} />
-             {page === 'admin' && (
-          <Adminpanel
-            user={user} 
-            onProductAdded={() => {
-              getProducts();
-              setPage('home');
-            }} 
+      <Header
+        page={page}
+        setPage={setPage}
+        user={user}
+        onLogout={logout}
+        cartCount={cartcount}
+      />
+      {page === "products" && (
+        <Showproducts
+          products={products}
+          AddToCart={addToCard}
+          onGoToAdmin={() => setPage("admin")}
+        />
+      )}
+      {page === "home" && <Home />}
+      {page === "admin" && (
+        <Adminpanel
+          user={user}
+          onProductsAdded={() => {
+           addToCard();
+           setPage("home");
+          }}
+        />
+      )}
+      {page === "cart" && (
+        <Cart
+          cart={cart}
+          user={user}
+          onChangeQty={changeQty}
+          onDelete={onDelete}
+          onClearCart={() => {
+            setCart([]);
+            setPage("home");
+          }}
+          onGoToHome={() => setPage("home")}
           />
         )}
-          {page === 'cart' && (
-          <Cart 
-        
-            cart={cart} 
-            user={user}
-           
-            onChangeQty={changeQty} 
-            onDelete={deleteCartItem} 
-            onClearCart={() => {
-              setCart([]);
-              setPage('home');
-            
-            }} 
-            onGoToHome={() => setPage('home')} 
-          />
-        )}
-    <Footer/>
+      <Footer />
     </div>
   );
 };

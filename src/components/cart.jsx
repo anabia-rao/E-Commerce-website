@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import mysupabase from "../supabaseClient";
+import {mysupabase} from "../supabase";
 
 function Cart({
   user,
@@ -10,11 +10,13 @@ function Cart({
   onDelete,
   onclearCart,
   Gotohome,
-}) {
-  const TotalPrice = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0,
-  );
+}) { 
+  const TotalPrice = (  cartItems || []).reduce(
+  (total, item) =>
+    total + Number(item.price || 0) * Number(item.quantity || 0),
+  0
+);
+
 
   async function handleCheckout() {
     const { data, error } = await mysupabase.from("orders").insert([
@@ -36,7 +38,7 @@ function Cart({
   return (
     <div className="cart-page">
       <h2>Your shopping cart 🛒.</h2>
-      {cartItems.length === 0 ? (
+      {(cartItems || []).length === 0 ? (
         <div className="empty-cart">
           <span>🛒</span>
           <p> Your cart is empty.</p>
@@ -45,20 +47,20 @@ function Cart({
       ) : (
         <div className="card-grid">
           <div className="cart-length">
-            {cart.map((items) => (
+            {Cart.map((items) => (
               <div className="cart-details" key={item.id}>
                 <img
-                  src={item.image_URL || "https://via.placeholder.com/60"}
-                  alt={item.name}
+                  src={product.image_URL || "https://via.placeholder.com/60"}
+                  alt={product.name}
                   className="cart-img"
                 />
                 <div className="cart-row-detail">
-                  <h4>{item.name}</h4>
-                  <span className="price-product">{item.price}</span>
+                  <h4>{product.name}</h4>
+                  <span className="price-product">{product.price}</span>
                 </div>
                 <div className="qty-control">
                   <button
-                    onClick={() => onchangeQty(item.id, -1)}
+                    onClick={() => onchangeQty(product.id, -1)}
                     className="Qty-btn"
                   >
                     {" "}
@@ -73,9 +75,9 @@ function Cart({
                     +
                   </button>
                 </div>
-                <span>Rs {(item.price * item.qty).toFixed(2)}</span>
+                <span>Rs {(product.price * product.qty).toFixed(2)}</span>
                 <button
-                  onClick={() => onDelete(item.id)}
+                  onClick={() => onDelete(product.id)}
                   className="delete-btn"
                 >
                   x
@@ -108,4 +110,4 @@ function Cart({
     </div>
   );
 }
-export default cart;
+export default Cart;
