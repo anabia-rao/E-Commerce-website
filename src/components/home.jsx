@@ -5,11 +5,12 @@ function Home() {
   return (
     <div className="home">
       <main>
-       < img  className="banner"  src={banner} alt="Mughal Foods" />
-       <div className="home-content">
-
-        <h1 style={{ fontSize: "2.5rem", fontWeight: "bold" }}>Welcome to Mughal Foods</h1>
-        <p>Experience the taste of authentic Mughal cuisine.</p>
+        <img className="banner" src={banner} alt="Mughal Foods" />
+        <div className="home-content">
+          <h1 style={{ fontSize: "2.5rem", fontWeight: "bold" }}>
+            Welcome to Mughal Foods
+          </h1>
+          <p>Experience the taste of authentic Mughal cuisine.</p>
         </div>
       </main>
     </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-function Showprodu ({ products, onAddToCart, onGoToAdmin }) {
+function Showprodu({ products, onAddToCart, onGoToAdmin }) {
   return (
     <div className="products">
       <div className="product-section">
@@ -39,12 +39,12 @@ function Showprodu ({ products, onAddToCart, onGoToAdmin }) {
                 <div className="pro-info">
                   <span className="price-tag">Rs {product.price}</span>
 
-                  <button 
-                      onClick={() => onAddToCart(product)} 
-                      className="add-to-cart-btn admin-btn"
-                    >
-                      + Add to Cart
-                    </button>
+                  <button
+                    onClick={() => onAddToCart(product)}
+                    className="add-to-cart-btn admin-btn"
+                  >
+                    + Add to Cart
+                  </button>
                 </div>
               </div>
             </div>

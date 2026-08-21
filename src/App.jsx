@@ -24,15 +24,16 @@ const App = () => {
     return () => checkUser.subscription.unsubscribe();
   }, []);
 
-   function addToCart(product) {
+  function addToCart(product) {
     const found = cart.find((item) => item.id === product.id);
 
-    if (found) { 
-      setCart(cart.map((item) => 
-        item.id === product.id ? { ...item, qty: item.qty + 1 } : item
-      ));
+    if (found) {
+      setCart(
+        cart.map((item) =>
+          item.id === product.id ? { ...item, qty: item.qty + 1 } : item,
+        ),
+      );
     } else {
-
       setCart([...cart, { ...product, qty: 1 }]);
     }
     alert(product.title + " added to cart!");
@@ -86,39 +87,40 @@ const App = () => {
         onLogout={logout}
         cartCount={cartcount}
       />
-
-      {page === "home" && (
-        <>
-          <Home />
-          <Showproducts
-            products={products}
-            onAddToCart={addToCart} 
-            onGoToAdmin={() => setPage("admin")}
+      <div className="main">
+        {page === "home" && (
+          <>
+            <Home />
+            <Showproducts
+              products={products}
+              onAddToCart={addToCart}
+              onGoToAdmin={() => setPage("admin")}
+            />
+          </>
+        )}
+        {page === "admin" && (
+          <Adminpanel
+            user={user}
+            onProductsAdded={() => {
+              addToCart();
+              setPage("home");
+            }}
           />
-        </>
-      )}
-      {page === "admin" && (
-        <Adminpanel
-          user={user}
-          onProductsAdded={() => {
-           addToCart();
-            setPage("home");
-          }}
-        />
-      )}
-      {page === "cart" && (
-        <Cart
-          cart={cart}
-          user={user}
-          onChangeQty={changeQty}
-          onDelete={onDelete}
-          onClearCart={() => {
-            setCart([]);
-            setPage("home");
-          }}
-          onGoToHome={() => setPage("home")}
-        />
-      )}
+        )}
+        {page === "cart" && (
+          <Cart
+            cart={cart}
+            user={user}
+            onChangeQty={changeQty}
+            onDelete={onDelete}
+            onClearCart={() => {
+              setCart([]);
+              setPage("home");
+            }}
+            onGoToHome={() => setPage("home")}
+          />
+        )}
+      </div>
       <Footer />
     </div>
   );

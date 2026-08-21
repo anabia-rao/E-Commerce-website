@@ -30,6 +30,7 @@ function Adminpanel({ user, onProductsAdded }) {
         email: email,
         password: password,
       });
+      console.log(error);
 
       if (error) {
         alert("login Error:" + error.message);
