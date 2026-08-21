@@ -1,6 +1,6 @@
 import React from "react";
 
-function Showproducts({ products, onGoToAdmin, addToCart }) {
+function Showprodu ({ products, onAddToCart, onGoToAdmin }) {
   return (
     <div className="products">
       <div className="product-section">
@@ -23,28 +23,28 @@ function Showproducts({ products, onGoToAdmin, addToCart }) {
         </div>
       ) : (
         <div className="products-grid">
-          {products.map((products) => (
-            <div key={products.id} className="main-card">
+          {products.map((product) => (
+            <div key={product.id} className="main-card">
               <img
-                src={products.image_URL}
-                alt={products.name}
+                src={product.image_URL}
+                alt={product.name}
                 className="img-tag"
               />
 
               <div className="product-info">
-                <h3>{products.name}</h3>
+                <h3>{product.name}</h3>
 
-                <p>{products.description || "No description."}</p>
+                <p>{product.description || "No description."}</p>
 
                 <div className="pro-info">
-                  <span className="price-tag">Rs {products.price}</span>
+                  <span className="price-tag">Rs {product.price}</span>
 
-                  <button
-                    onClick={() => addToCart(products)}
-                    className="add-to-cart admin-btn"
-                  >
-                    + Add to Cart
-                  </button>
+                  <button 
+                      onClick={() => onAddToCart(product)} 
+                      className="add-to-cart-btn admin-btn"
+                    >
+                      + Add to Cart
+                    </button>
                 </div>
               </div>
             </div>
@@ -55,4 +55,4 @@ function Showproducts({ products, onGoToAdmin, addToCart }) {
   );
 }
 
-export default Showproducts;
+export default Showprodu;

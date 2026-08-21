@@ -24,18 +24,18 @@ const App = () => {
     return () => checkUser.subscription.unsubscribe();
   }, []);
 
-  function addToCard(products) {
-    const find = cart.find((item) => item.id === products.id);
-    if (find) {
-      setCart(
-        cart.map((item) =>
-          item.id === products.id ? { ...item, qty: item.qty + 1 } : item,
-        ),
-      );
+   function addToCart(product) {
+    const found = cart.find((item) => item.id === product.id);
+
+    if (found) { 
+      setCart(cart.map((item) => 
+        item.id === product.id ? { ...item, qty: item.qty + 1 } : item
+      ));
     } else {
-      setCart([...cart, { ...products, qty: 1 }]);
+
+      setCart([...cart, { ...product, qty: 1 }]);
     }
-    alert(products.id + "added to cart");
+    alert(product.title + " added to cart!");
   }
 
   async function getproducts() {
@@ -46,8 +46,7 @@ const App = () => {
       return;
     }
 
-    console.log("Products:", data);
-    setProducts(data || []);
+    setProducts(data);
   }
 
   useEffect(() => {
@@ -93,7 +92,7 @@ const App = () => {
           <Home />
           <Showproducts
             products={products}
-            AddToCart={addToCard}
+            onAddToCart={addToCart} 
             onGoToAdmin={() => setPage("admin")}
           />
         </>
@@ -102,7 +101,7 @@ const App = () => {
         <Adminpanel
           user={user}
           onProductsAdded={() => {
-            addToCard();
+           addToCart();
             setPage("home");
           }}
         />
