@@ -42,7 +42,7 @@ function Cart({
         <div className="empty-cart">
           <span>🛒</span>
           <p> Your cart is empty.</p>
-          <button onClick={Gotohome}>Continue Shopping</button>
+          <button onClick={Gotohome} className="admin-btn">Continue Shopping</button>
         </div>
       ) : (
         <div className="card-grid">

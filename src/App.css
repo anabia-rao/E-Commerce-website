@@ -202,3 +202,31 @@ height: 30px;
   font-weight: bold;
   text-shadow: 0 0 10px rgba(233, 184, 47, 0.25);
 }
+.main-card{
+  width: 200px;
+  display: flex;
+  border: #DFAF3A;
+  background: #cdc2c2;
+}
+              
+.img-tag{
+  width: 100px;
+}
+.products-grid{
+ border: #d4af37;
+  text-align: center;
+   display: flex;
+   
+}
+.product-info{
+ border: #d4af37;
+ 
+}
+.price-tag{
+ 
+ border: #d4af37;
+}
+
+.cart-page{
+  text-align: center;
+}

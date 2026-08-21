@@ -24,7 +24,7 @@ const App = () => {
     return () => checkUser.subscription.unsubscribe();
   }, []);
 
-  function addToCard() {
+  function addToCard(products) {
     const find = cart.find((item) => item.id === products.id);
     if (find) {
       setCart(
@@ -35,31 +35,29 @@ const App = () => {
     } else {
       setCart([...cart, { ...products, qty: 1 }]);
     }
-     alert(products.id + "added to cart");
+    alert(products.id + "added to cart");
   }
 
- 
   async function getproducts() {
-  const { data, error } = await mysupabase
-    .from("products")
-    .select("*");
+    const { data, error } = await mysupabase.from("products").select("*");
 
-  if (error) {
-    console.log("Product fetch error:", error);
-    return;
+    if (error) {
+      console.log("Product fetch error:", error);
+      return;
+    }
+
+    console.log("Products:", data);
+    setProducts(data || []);
   }
 
-  console.log("Products:", data);
-  setProducts(data || []);
-}
-
-useEffect(() => {
-  getproducts();
-}, []);
+  useEffect(() => {
+    getproducts();
+  }, []);
 
   function changeQty(id, amount) {
     setCart(
-    cart.map((item) => {
+      cart
+        .map((item) => {
           if (item.id === id) {
             const newqty = item.qty + amount;
             return newqty > 0 ? { ...item, qty: newqty } : null;
@@ -78,17 +76,6 @@ useEffect(() => {
     setPage("home");
   }
 
-  // async function getproducts() {
-  //   const { data, error } = await mysupabase.from("products").select("*");
-  //   if (!error && data) {
-  //     setProducts(data);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   getproducts();
-  // }, []);
-
   const cartcount = (cart || []).reduce((total, item) => total + item.qty, 0);
 
   return (
@@ -100,7 +87,7 @@ useEffect(() => {
         onLogout={logout}
         cartCount={cartcount}
       />
-     
+
       {page === "home" && (
         <>
           <Home />
@@ -115,8 +102,8 @@ useEffect(() => {
         <Adminpanel
           user={user}
           onProductsAdded={() => {
-           addToCard();
-           setPage("home");
+            addToCard();
+            setPage("home");
           }}
         />
       )}
@@ -131,8 +118,8 @@ useEffect(() => {
             setPage("home");
           }}
           onGoToHome={() => setPage("home")}
-          />
-        )}
+        />
+      )}
       <Footer />
     </div>
   );

@@ -1,25 +1,14 @@
 import React from "react";
 
-import burger from "../assets/burger.png";
-import pizza from "../assets/pizza.png";
-
 function Showproducts({ products, onGoToAdmin, addToCart }) {
   return (
     <div className="products">
-      <div className="burger">
-        <img className="burger" src={burger} alt="Burger" />
-      </div>
-
-      <div className="pizza">
-        <img className="pizza" src={pizza} alt="Pizza" />
-      </div>
-
       <div className="product-section">
         <h2>Store Items</h2>
-
         <p>Browse items added by Admin</p>
-
-        <button onClick={onGoToAdmin}>+ Add New Item</button>
+        <button onClick={onGoToAdmin} className="admin-btn">
+          + Add New Item
+        </button>
       </div>
 
       {products.length === 0 ? (
@@ -28,7 +17,9 @@ function Showproducts({ products, onGoToAdmin, addToCart }) {
 
           <h3>No Product Found</h3>
 
-          <button onClick={onGoToAdmin}>Go To Admin Panel</button>
+          <button onClick={onGoToAdmin} className="admin-btn">
+            Go To Admin Panel
+          </button>
         </div>
       ) : (
         <div className="products-grid">
@@ -50,7 +41,7 @@ function Showproducts({ products, onGoToAdmin, addToCart }) {
 
                   <button
                     onClick={() => addToCart(products)}
-                    className="add-to-cart"
+                    className="add-to-cart admin-btn"
                   >
                     + Add to Cart
                   </button>
