@@ -24,7 +24,7 @@ const App = () => {
     return () => checkUser.subscription.unsubscribe();
   }, []);
 
-  function addToCard(products) {
+  function addToCard() {
     const find = cart.find((item) => item.id === products.id);
     if (find) {
       setCart(
@@ -35,7 +35,7 @@ const App = () => {
     } else {
       setCart([...cart, { ...products, qty: 1 }]);
     }
-    return alert(products.name + "added to cart");
+     alert(products.id + "added to cart");
   }
 
  
@@ -59,8 +59,7 @@ useEffect(() => {
 
   function changeQty(id, amount) {
     setCart(
-      cart
-        .map((item) => {
+    cart.map((item) => {
           if (item.id === id) {
             const newqty = item.qty + amount;
             return newqty > 0 ? { ...item, qty: newqty } : null;
@@ -79,16 +78,16 @@ useEffect(() => {
     setPage("home");
   }
 
-  async function getproducts() {
-    const { data, error } = await mysupabase.from("products").select("*");
-    if (!error && data) {
-      setProducts(data);
-    }
-  }
+  // async function getproducts() {
+  //   const { data, error } = await mysupabase.from("products").select("*");
+  //   if (!error && data) {
+  //     setProducts(data);
+  //   }
+  // }
 
-  useEffect(() => {
-    getproducts();
-  }, []);
+  // useEffect(() => {
+  //   getproducts();
+  // }, []);
 
   const cartcount = (cart || []).reduce((total, item) => total + item.qty, 0);
 
@@ -101,14 +100,17 @@ useEffect(() => {
         onLogout={logout}
         cartCount={cartcount}
       />
-      {page === "products" && (
-        <Showproducts
-          products={products}
-          AddToCart={addToCard}
-          onGoToAdmin={() => setPage("admin")}
-        />
+     
+      {page === "home" && (
+        <>
+          <Home />
+          <Showproducts
+            products={products}
+            AddToCart={addToCard}
+            onGoToAdmin={() => setPage("admin")}
+          />
+        </>
       )}
-      {page === "home" && <Home />}
       {page === "admin" && (
         <Adminpanel
           user={user}
