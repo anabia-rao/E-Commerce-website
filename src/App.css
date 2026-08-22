@@ -1,7 +1,6 @@
 * {
   color: #d4af37;
-  /* background: #160B0B;
-  color: #C9A227;  */
+  font-family: Georgia, serif;
 }
 
 body,
@@ -35,20 +34,6 @@ button {
   margin-top: 15px;
   text-align: center;
 }
-.burger {
-  border: 1px solid #d4af37;
-
-  width: 350px;
-  height: 200px;
-  border-radius: 10px;
-}
-.pizza {
-  border: 1px solid #d4af37;
-
-  width: 350px;
-  height: 200px;
-  border-radius: 10px;
-}
 
 .products {
   display: flex;
@@ -63,7 +48,6 @@ button {
   align-items: right;
   margin-top: 14px;
   gap: 15px;
-  /* margin-right: 50px; */
 }
 .nav-btn {
   width: 70px;
